@@ -1,0 +1,27 @@
+﻿@model IEnumerable< CustomerReg.Models.Customer>
+@{
+}
+<div>
+    <table class="table-bordered">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Country</th>
+            <th>State</th>
+            <th>City</th>
+        </tr>
+        @foreach(var cus in Model)
+            {
+    <tr>
+        <td>@cus.Name</td>
+        <td>@cus.Email</td>
+        <td>@cus.Gender</td>
+        <td>@cus.Country</td>
+        <td>@cus.State</td>
+        <td>@cus.City</td>
+    </tr>
+            }
+    </table>
+</div>

@@ -1,0 +1,100 @@
+﻿@model CustomerReg.Models.Customer
+@{ 
+    
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form id="Form" asp-action="CreateCustomer" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input id="Name" asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            
+            
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input id="Email" asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <input id="Gender" asp-for="Gender" class="form-control" />
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Country" class="control-label">Select Country</label>
+                <select class="form-control country"><option>Select</option></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="State" class="control-label">Select State</label>
+                <select class="form-control state"><option>Select</option></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label">Select City</label>
+                <select class="form-control city"><option>Select</option></select>
+            </div>
+
+            <div class="form-group">
+                <input id="btnSubmit" type="button" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        getcountries();
+    $(".country").change(function () {
+            var id = $(".country").val();
+    getStates(id);
+        })
+    $(".state").change(function () {
+            var id = $(".state").val();
+    getCities(id);
+    })
+
+        $("#btnSubmit").click(function (e) {
+            //Serialize the form datas.
+            var valdata = $("#Form").serialize();
+            //to get alert popup
+            alert(valdata);
+            $.ajax({
+                url: '@Url.Action("CreateCustomer","Customer")',
+                type: "POST",
+               // dataType: 'json',
+                //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: valdata
+            });
+        });
+
+    })
+    function getcountries() {
+        $.get('@Url.Action("GetCountries","Customer")', function (result) {
+            $.each(result, function (index, item) {
+                console.log(item)
+                $(".country").append("<option value=" + item.id + ">" + item.name + "</option>")
+            })
+        })
+    }
+    function getStates(countryid) {
+        $.get('@Url.Action("GetStates","Customer")', { id: countryid }, function (result) {
+            $.each(result, function (index, item) {
+                console.log(item)
+                $(".state").append("<option value=" + item.id + ">" + item.name + "</option>")
+            })
+        })
+
+    }
+    function getCities(stateid) {
+        $.get('@Url.Action("GetCities", "Customer")', { id: stateid }, function (result) {
+            $.each(result, function (index, item) {
+                console.log(item)
+                $(".city").append("<option value=" + item.id + ">" + item.name + "</option>")
+            })
+        })
+    }
+
+</script>
